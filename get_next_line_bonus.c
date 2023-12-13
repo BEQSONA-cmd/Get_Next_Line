@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: btvildia <btvildia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 19:05:09 by btvildia          #+#    #+#             */
-/*   Updated: 2023/12/13 19:52:04 by btvildia         ###   ########.fr       */
+/*   Created: 2023/12/13 18:10:22 by btvildia          #+#    #+#             */
+/*   Updated: 2023/12/13 19:48:06 by btvildia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*read_full(int fd, char *line)
 {
@@ -96,32 +96,15 @@ char	*get_first_line(char *buff)
 
 char	*get_next_line(int fd)
 {
-	static char	*fline;
+	static char	*fline[1024];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	fline = read_full(fd, fline);
-	if (!fline)
+	fline[fd] = read_full(fd, fline[fd]);
+	if (!fline[fd])
 		return (NULL);
-	line = get_first_line(fline);
-	fline = ft_save(fline);
+	line = get_first_line(fline[fd]);
+	fline[fd] = ft_save(fline[fd]);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*line;
-
-// 	fd = open("text.txt", O_RDONLY);
-// 	line = get_next_line(fd);
-// 	while (line != NULL)
-// 	{
-// 		printf("%s\n", line);
-// 		free(line);
-// 		line = get_next_line(fd);
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
